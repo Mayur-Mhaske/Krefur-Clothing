@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Order History - KREFUR</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <style>
+    body { background: #fff; font-family: 'Segoe UI', sans-serif; }
+    .order-card { border: 1px solid #eee; border-radius: 10px; margin-bottom: 20px; padding: 15px; }
+    .order-status { font-size: 0.9rem; }
+    .bottom-nav {
+      position: fixed; bottom: 0; left: 0; width: 100%;
+      background: #f8f9fa; display: flex; justify-content: space-around;
+      padding: 10px 0; border-top: 1px solid #ccc;
+    }
+    .bottom-nav i { font-size: 1.2rem; }
+    .cattt { color: black; text-decoration: none; }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-light bg-light px-3 d-flex justify-content-between">
+  <span class="navbar-brand brand">KREFUR</span>
+  <div>
+    <a href="index.html"><i class="bi bi-house-door mx-2"></i></a>
+    <a href="category.html"><i class="bi bi-grid mx-2"></i></a>
+    <a href="order-history.html"><i class="bi bi-cart mx-2"></i></a>
+    <i class="bi bi-person mx-2" id="personIconTop" style="cursor:pointer;"></i>
+  </div>
+</nav>
+
+<!-- Order History Content -->
+<div class="container mt-4 mb-5">
+  <h4>Your Orders</h4>
+  <div id="orderHistoryBody"></div>
+</div>
+
+<!-- Bottom Navigation -->
+<div class="bottom-nav">
+  <a href="index.html"><i class="bi bi-house-door"></i></a>
+  <a href="category.html" class="cattt"><i class="bi bi-grid"></i></a>
+  <a href="order-history.html"><i class="bi bi-cart"></i></a>
+  <i class="bi bi-person" id="personIconBottom" style="cursor:pointer;"></i>
+</div>
+
+<script>
+function showOrderHistory() {
+  const orderHistoryBody = document.getElementById('orderHistoryBody');
+  let history = JSON.parse(localStorage.getItem('orderHistory') || '[]');
+
+  if (!history.length) {
+    orderHistoryBody.innerHTML = '<p>No orders yet.</p>';
+    return;
+  }
+
+  orderHistoryBody.innerHTML = history.reverse().map((order, idx) => `
+    <div class="order-card">
+      <div><b>Order #${history.length - idx}</b> 
+        <span class="badge bg-success order-status">Confirmed</span>
+      </div>
+      <div><b>Items:</b>
+        <ul style="margin-bottom:0;">
+          ${order.items.map(item => `<li>${item.name} x ${item.qty} (₹${item.price * item.qty})</li>`).join('')}
+        </ul>
+      </div>
+      <div><b>Total:</b> ₹${order.total}</div>
+      <div><b>Address:</b> ${order.address.name}, ${order.address.address}, ${order.address.city}, ${order.address.pincode}, ${order.address.phone}</div>
+      <div><b>Date:</b> ${order.date}</div>
+    </div>
+  `).join('');
+}
+
+showOrderHistory();
+
+document.getElementById('personIconTop').onclick = function () {
+  alert("Profile/Login coming soon!");
+};
+document.getElementById('personIconBottom').onclick = function () {
+  alert("Profile/Login coming soon!");
+};
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
